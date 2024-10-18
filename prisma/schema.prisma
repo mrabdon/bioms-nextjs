@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id       String @id
+  username String @unique
+}
+
+model Employee {
+  id        String     @id
+  username  String     @unique
+  name      String
+  surname   String
+  email     String?    @unique
+  phone     String?    @unique
+  address   String
+  img       String?
+  bloodType String
+  sex       UserGender
+  createdAt DateTime   @default(now())
+  companies Company[]
+}
+
+model Supervisor {
+  id        String     @id
+  username  String     @unique
+  name      String
+  surname   String
+  email     String?    @unique
+  phone     String?    @unique
+  address   String
+  img       String?
+  bloodType String
+  gender    UserGender
+  createdAt DateTime   @default(now())
+  companies Company[]
+}
+
+model Company {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+  employees   Employee[]
+  supervisors Supervisor[]
+}
+
+enum UserGender {
+  MALE
+  FEMALE
+}
