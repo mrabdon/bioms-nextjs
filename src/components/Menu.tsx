@@ -99,11 +99,12 @@ const menuItems = [
         icon: "/logout.png",
         label: "Logout",
         href: "",
-        visible: ["admin", "companyAdmin", "secretary"],
+   
       },
     ],
   },
 ];
+
 
 const Menu = async () => {
   const user = await currentUser();
@@ -116,14 +117,12 @@ const Menu = async () => {
             {i.title}
           </span>
           {i.items.map((item) => {
-            if (item.visible.includes(role)) {
+            if (item.visible?.includes(role)) {
               return (
                 <Link
                   href={item.href}
                   key={item.label}
-                  className="flex items-center justify-center lg:justify-start gap-4 py-2 rounded-md md:px-2 hover:bg-ronLimeGreen 
-               
-                     text-gray-500"
+                  className="flex items-center justify-center lg:justify-start gap-4 text-gray-500 py-2 md:px-2 rounded-md hover:bg-lamaSkyLight"
                 >
                   <Image src={item.icon} alt="" width={20} height={20} />
                   <span className="hidden lg:block">{item.label}</span>

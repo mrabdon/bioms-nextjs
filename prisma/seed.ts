@@ -64,6 +64,17 @@ async function main() {
       },
     });
   }
+
+
+  // //  VOLUME
+  //  for (let i = 1; i <= 50; i++) {
+  //   await prisma.volume.create({
+  //     data: {
+  //       id: `employee${i}`,
+      
+  //     },
+  //   });
+  // }
 }
 main()
   .then(async () => {

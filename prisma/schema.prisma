@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "windows"]
 }
 
 datasource db {
@@ -25,6 +26,7 @@ model Employee {
   sex       UserGender
   createdAt DateTime   @default(now())
   companies Company[]
+  volumes   Volume[]
 }
 
 model Supervisor {
@@ -48,6 +50,17 @@ model Company {
 
   employees   Employee[]
   supervisors Supervisor[]
+}
+
+model Volume {
+  id              Int      @id @default(autoincrement())
+  datePeriod      String   @unique
+  committedVolume Int
+  createdAt       DateTime @default(now())
+  createdBy       String
+  status          String
+
+  employees Employee[]
 }
 
 enum UserGender {

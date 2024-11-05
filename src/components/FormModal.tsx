@@ -24,6 +24,10 @@ const FormForm = dynamic(() => import("./forms/FormForm"), {
 const BidForm = dynamic(() => import("./forms/BidForm"), {
   loading: () => <h1>Loading...</h1>,
 });
+
+const VolumeForm = dynamic(() => import("./forms/VolumeForm"), {
+  loading: () => <h1>Loading...</h1>,
+});
 // const StudentForm = dynamic(() => import("./forms/StudentForm"), {
 //   loading: () => <h1>Loading...</h1>,
 // });
@@ -36,6 +40,7 @@ const forms: {
   form: (type, data) => <FormForm type={type} data={data} />,
   bid: (type, data) => <BidForm type={type} data={data} />,
   teacher: (type, data) => <TeacherForm type={type} data={data} />,
+  volume: (type, data) => <VolumeForm type={type} data={data} />,
   // student: (type, data) => <StudentForm type={type} data={data} />
 };
 
@@ -50,6 +55,7 @@ const FormModal = ({
     | "product"
     | "form"
     | "bid"
+    | "volume"
     | "teacher"
     | "student"
     | "parent"

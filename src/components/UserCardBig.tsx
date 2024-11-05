@@ -7,10 +7,9 @@ const UserCard = ({ type }: { type: string }) => {
 
          <div className="flex items-center gap-2 p-1">
             <Image
-              // src={`${type}.png` : "/bioms-logo.png"}
-              src={ "/bioms-logo.png"}
+              src={"/line.png"}
               alt=""
-              width={40}
+              width={100}
               height={40}
               className=" xl:block w-10 h-10 rounded-xl object-cover"
               />
@@ -21,7 +20,7 @@ const UserCard = ({ type }: { type: string }) => {
             </div>
             <div className="items-center flex-1">
               
-              <h1 className="font-semibold text-green-500 ">80 <span className="text-red-400">%</span></h1>
+              <h1 className="font-semibold">0</h1>
            
             </div>
           </div>
@@ -31,20 +30,6 @@ const UserCard = ({ type }: { type: string }) => {
         </div>
     </div>
 
-    // <div className="grid grid-cols-4 gap-4 mt-6">
-  
-    //   <div  className="bg-white rounded-lg shadow p-4">
-    //     <div className="flex items-center space-x-4">
-    //       <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
-    //         <span className="text-xl font-semibold">0</span>
-    //       </div>
-    //       <div>
-    //         <h2 className="text-lg font-semibold">{type}</h2>
-    //       </div>
-    //     </div>
-    //   </div>
-  
-  // </div>
     );
 };
 

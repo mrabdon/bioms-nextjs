@@ -1,4 +1,4 @@
-export const ITEM_PER_PAGE = 5;
+export const ITEM_PER_PAGE = 10;
 
 type RouteAccessMap = {
   [key: string]: string[];
@@ -13,6 +13,6 @@ export const routeAccessMap: RouteAccessMap = {
   "/list/volumes": ["admin", "companyAdmin","secretary"],
   "/list/forms": ["admin", "companyAdmin"],
   "/list/reports": ["admin", "companyAdmin","secretary"],
-  "/list/activityLog": ["admin"]
+  "/list/activityLog": ["admin"],
 
 }
