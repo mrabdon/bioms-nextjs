@@ -2,23 +2,15 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-
 import InputField from "../InputField";
-import Image from "next/image";
-import {
-  SubjectSchema,
-  VolumeSchema,
-  subjectSchema,
-  volumeSchema,
-} from "@/lib/formValidationSchemas";
-import { createSubject, createVolume, updateVolume } from "@/lib/actions";
+import { ProducerSchema, producerSchema } from "@/lib/formValidationSchemas";
+import { createProducer, updateProducer } from "@/lib/actions";
 import { useFormState } from "react-dom";
 import { useEffect, Dispatch, SetStateAction } from "react";
-import { GiToaster } from "react-icons/gi";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 
-const VolumeForm = ({
+const ProducerForm = ({
   type,
   data,
   setOpen,
@@ -31,12 +23,12 @@ const VolumeForm = ({
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<VolumeSchema>({
-    resolver: zodResolver(volumeSchema),
+  } = useForm<ProducerSchema>({
+    resolver: zodResolver(producerSchema),
   });
 
   const [state, formAction] = useFormState(
-    type === "create" ? createVolume : updateVolume,
+    type === "create" ? createProducer : updateProducer,
     {
       success: false,
       error: false,
@@ -51,7 +43,7 @@ const VolumeForm = ({
 
   useEffect(() => {
     if (state.success) {
-      toast(`Volume has been ${type === "create" ? "created" : "updated"}`);
+      toast(`Producer has been ${type === "create" ? "created" : "updated"}`);
       setOpen(false);
       router.refresh();
     }
@@ -60,18 +52,27 @@ const VolumeForm = ({
   return (
     <form className="flex flex-col gap-8" onSubmit={onSubmit}>
       <h1 className="text-xl font-semibold">
-        {type === "create" ? "Create a new Volume" : "Update the Volume"}
+        {type === "create" ? "Create a new Producer" : "Update the Producer"}
       </h1>
       <span className="text-xs text-gray-400 font-medium">
-        Volume Information
+        Producer Information
       </span>
       <div className="flex justify-between flex-wrap gap-4">
         <InputField
-          label="Committed Volume"
-          name="committedVolume"
-          defaultValue={data?.committedVolume}
+          label="Id Number"
+          name="id"
+          defaultValue={data?.id}
           register={register}
-          error={errors?.committedVolume}
+          error={errors?.id}
+        />
+      </div>
+      <div className="flex justify-between flex-wrap gap-4">
+        <InputField
+          label="Name"
+          name="name"
+          defaultValue={data?.name}
+          register={register}
+          error={errors?.name}
         />
       </div>
 
@@ -95,4 +96,4 @@ const VolumeForm = ({
   );
 };
 
-export default VolumeForm;
+export default ProducerForm;

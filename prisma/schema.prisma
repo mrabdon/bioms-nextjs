@@ -13,57 +13,84 @@ model Admin {
   username String @unique
 }
 
-model Employee {
+model User {
   id        String     @id
   username  String     @unique
   name      String
   surname   String
-  email     String?    @unique
+  email     String     @unique
   phone     String?    @unique
-  address   String
+  address   String?
+  role      String
   img       String?
-  bloodType String
-  sex       UserGender
+  gender    UserGender
   createdAt DateTime   @default(now())
-  companies Company[]
+  producers Producer[]
   volumes   Volume[]
 }
 
-model Supervisor {
-  id        String     @id
-  username  String     @unique
+model Volume {
+  id               Int        @id @default(autoincrement())
+  date             DateTime   @default(now())
+  committedVolume  Int
+  actualProduction Int
+  begInventory     Int
+  totalStock       Int
+  sold             Int
+  unsold           Int
+  producers        Producer[]
+  users            User[]
+}
+
+model Teacher {
+  id        String    @id
+  username  String    @unique
   name      String
   surname   String
-  email     String?    @unique
-  phone     String?    @unique
+  email     String?   @unique
+  phone     String?   @unique
   address   String
   img       String?
   bloodType String
-  gender    UserGender
-  createdAt DateTime   @default(now())
-  companies Company[]
+  createdAt DateTime  @default(now())
+  subjects  Subject[]
+
+  birthday DateTime
 }
 
-model Company {
-  id   Int    @id @default(autoincrement())
-  name String @unique
-
-  employees   Employee[]
-  supervisors Supervisor[]
+model Producer {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  createdAt DateTime  @default(now())
+  users     User[]
+  volumes   Volume[]
+  subjects  Subject[]
 }
 
-model Volume {
-  id              Int      @id @default(autoincrement())
-  datePeriod      String   @unique
-  committedVolume Int
-  createdAt       DateTime @default(now())
-  createdBy       String
-  status          String
-
-  employees Employee[]
+model Subject {
+  id        Int        @id @default(autoincrement())
+  name      String     @unique
+  producers Producer[]
+  teachers  Teacher[]
 }
 
 enum UserGender {
   MALE
   FEMALE
+}
+
+enum Roles {
+  producer
+  consumer
+}
+
+model Invoice {
+  id               Int      @id @default(autoincrement())
+  date             String   @unique
+  committedVolume  Int
+  actualProduction DateTime @default(now())
+  begInventory     String
+  totalStock       String
+  sold             String
+  unsold           String
 }

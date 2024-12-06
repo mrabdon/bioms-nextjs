@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Line, LineChart, ResponsiveContainer, Tooltip } from "recharts";
 
@@ -16,7 +17,7 @@ const ChartBox = (props: Props) => {
     <div className="flex h-full sm:flex-col">
       <div className="flex flex-3 flex-col justify-between sm:gap-5">
         <div className="flex items-center gap-2 text-lg">
-          <img src={props.icon} alt={props.title} />
+          <Image src={props.icon} alt={props.title} />
           <span>{props.title}</span>
         </div>
         <h1 className="text-2xl font-bold">{props.number}</h1>

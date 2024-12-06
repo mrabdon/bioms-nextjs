@@ -106,3 +106,25 @@
   color: gray !important;
   margin-bottom: 5px;
 }
+
+/* Custom color for the loading bar */
+.Toastify__progress-bar {
+  background-color: #4CAF50; /* Replace with your desired color */
+}
+
+/* Example for customizing different types of toast */
+.Toastify__toast--success .Toastify__progress-bar {
+  background-color: #4CAF50; /* Green for success */
+}
+
+.Toastify__toast--error .Toastify__progress-bar {
+  background-color: #F44336; /* Red for error */
+}
+
+.Toastify__toast--info .Toastify__progress-bar {
+  background-color: #2196F3; /* Blue for info */
+}
+
+.Toastify__toast--warning .Toastify__progress-bar {
+  background-color: #FF9800; /* Orange for warning */
+}

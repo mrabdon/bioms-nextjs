@@ -4,13 +4,9 @@ import AttendanceChart from "@/components/AttendanceChart";
 import CountChart from "@/components/CountChart";
 import EventCalendar from "@/components/EventCalendar";
 import FinanceChart from "@/components/FinanceChart";
-import OverviewBox from "@/components/OverviewBox";
-import OverviewCard from "@/components/OverviewCard";
 // import EventCalendar from "@/components/EventCalendar";
 // import FinanceChart from "@/components/FinanceChart";
 import UserCard from "@/components/UserCard";
-import UserCardBig from "@/components/UserCardBig";
-import Image from "next/image";
 import {
   FaUsers,
   FaFileInvoice,
@@ -20,7 +16,7 @@ import {
   FaBriefcase,
 } from "react-icons/fa";
 
-const AdminPage = () => {
+const data = () => {
   const estimationItems = [
     { label: "Draft", count: 0, percentage: 0.0, color: "black" },
     { label: "Sent", count: 0, percentage: 0.0, color: "green" },
@@ -83,62 +79,27 @@ const AdminPage = () => {
       icon: <FaBriefcase className="text-white" />,
     },
   ];
-
+};
+const ConsumerPage = () => {
   return (
     <div className="p-4 flex gap-4 flex-col md:flex-row">
       {/* LEFT */}
-      <div className="w-full flex flex-col gap-8">
-        <h1 className="font-semibold gap-8 p-2">Dashboard</h1>
+      <div className="w-full lg:w-2/3 flex flex-col">
         {/* USER CARDS */}
-        {/* <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 ">
-            <UserCard type="Unlifted" />
-            <UserCard type="Lifted" />
-            <UserCard type="Committed" />
-            <UserCard type="Remaining" />
-            <UserCard type="Pending" />
-            <UserCard type="Total" />
-          </div> */}
+        <div className="flex gap-2 justify-between flex-wrap"></div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {overviewData.map((data, index) => (
-            <OverviewBox
-              key={index}
-              title={data.title}
-              count={data.count}
-              color={data.color}
-              icon={data.icon}
-            />
-          ))}
-        </div>
+        <Announcements />
         {/* MIDDLE CHARTS */}
 
         {/* BOTTOM CHART */}
-        {/* <div className="w-full h-[500px] flex flex-wrap gap-4"> */}
-        <div className="w-full flex flex-col gap-2">
-          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-            {/* <h1 className="text-2xl font-semibold my-4 ">Reports <span className="text-blue-400">Overview</span></h1> */}
-            <OverviewCard title="Lifted Overview" items={estimationItems} />
-            <OverviewCard title="Unlifted Overview" items={invoiceItems} />
-            <OverviewCard
-              title="Actual Production Overview"
-              items={projectItems}
-            />
-          </div>
-        </div>
-        {/* RIGHT */}
-        {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-          <DueCard title="Top Due Payment" content="Payment record not found" />
-          <DueCard title="Top Due Project" content="Project record not found" />
-        </div> */}
-
-        {/* <div className="w-full lg:w-1/3 flex flex-col gap-8">
-
-          <Announcements />
-          
-        </div> */}
+        <div className="w-full h-[500px]"></div>
+      </div>
+      {/* RIGHT */}
+      <div className="w-full lg:w-1/3 flex flex-col gap-8">
+        <EventCalendar />
       </div>
     </div>
   );
 };
 
-export default AdminPage;
+export default ConsumerPage;
