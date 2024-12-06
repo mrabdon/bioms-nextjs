@@ -3,9 +3,9 @@ services:
     image: postgres:12
     container_name: postgres_db
     environment:
-      POSTGRES_USER: myuser
-      POSTGRES_PASSWORD: mypassword
-      POSTGRES_DB: mydb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: example
+      POSTGRES_DB: dev-db
     ports:
       - "5432:5432"
     volumes:
@@ -18,7 +18,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - DATABASE_URL: postgresql://myuser:mypassword@localhost:5432/mydb
+      - DATABASE_URL: postgresql://postgres:example@localhost:5432/dev-db
     depends_on:
       - postgres
 
