@@ -6,17 +6,11 @@ type RouteAccessMap = {
 
 export const routeAccessMap: RouteAccessMap = {
   "/admin(.*)": ["admin"],
-  "/demo(.*)": ["admin"],
-  "/secretary(.*)": ["secretary"],
-  "/companyAdmin(.*)": ["companyAdmin"],
-  "/list/biofuels": ["admin", "companyAdmin"],
-  "/list/users": ["admin", "companyAdmin"],
-  "/list/volumes": ["admin", "producer"],
-  "/list/subjects": ["admin", "producer"],
+  "/producer(.*)": ["producer"],
+  "/staff(.*)": ["staff"],
+  "/list/users": ["admin", "producer"],
+  "/list/volumes": ["admin", "producer", "staff"],
+  "/list/reports": ["admin", "producer", "staff"],
   "/list/forms": ["admin", "producer"],
-  "/list/reports": ["admin", "companyAdmin", "secretary"],
-  "/list/usermanagement": ["admin", "companyAdmin", "secretary"],
-  "/list/usermanagement/invitation": ["admin", "companyAdmin", "secretary"],
-  "/list/allusers": ["admin", "companyAdmin", "secretary"],
   "/list/activityLog": ["admin"],
 };

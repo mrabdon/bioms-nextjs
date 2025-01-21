@@ -1,0 +1,73 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "windows"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id       String @id
+  username String @unique
+}
+
+model User {
+  id         String     @id
+  username   String     @unique
+  name       String
+  surname    String
+  email      String     @unique
+  phone      String?    @unique
+  address    String?
+  role       String
+  img        String?
+  gender     UserGender
+  createdAt  DateTime   @default(now())
+  producers  Producer[]
+  volumes    Volume[]
+  Consumer   Consumer?  @relation(fields: [consumerId], references: [id])
+  consumerId Int?
+}
+
+model Volume {
+  id               Int        @id @default(autoincrement())
+  date             DateTime   @default(now())
+  committedVolume  Int
+  actualProduction Int
+  begInventory     Int
+  totalStock       Int
+  sold             Int
+  soldTo           String
+  unsold           Int
+  producers        Producer[]
+  users            User[]
+  consumers        Consumer[]
+}
+
+model Producer {
+  id        String   @id
+  name      String   @unique
+  createdAt DateTime @default(now())
+  users     User[]
+  volumes   Volume[]
+}
+
+model Consumer {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  users     User[]
+  volumes   Volume[]
+}
+
+enum UserGender {
+  MALE
+  FEMALE
+}
+
+enum Roles {
+  producer
+  consumer
+}

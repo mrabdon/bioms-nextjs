@@ -5,6 +5,7 @@ interface OverviewBoxProps {
   color: string; // Background color as a string
   title: string; // Title text
   count: number; // Count as a number
+  formattedCount: string; // Count as a number
 }
 
 const OverviewBox: React.FC<OverviewBoxProps> = ({
@@ -12,6 +13,7 @@ const OverviewBox: React.FC<OverviewBoxProps> = ({
   color,
   title,
   count,
+  formattedCount,
 }) => {
   return (
     <div className="flex items-center bg-white shadow-lg rounded-xl p-4 w-full min-w-[150px]">
@@ -23,11 +25,10 @@ const OverviewBox: React.FC<OverviewBoxProps> = ({
       </div>
       <div className="ml-4">
         <p className="text-sm text-gray-500">Total</p>
-        <h3 className="text-lg font-semibold">{title}</h3>
+        <h3 className="text-sm font-semibold">{title}</h3>
+        <p>{formattedCount}</p>
       </div>
-      <div className="ml-auto text-2xl font-semibold text-gray-700">
-        {count}
-      </div>
+      <div className="ml-auto  font-medium text-gray-700">{count}</div>
     </div>
   );
 };

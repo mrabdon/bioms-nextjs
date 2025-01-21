@@ -1,41 +1,25 @@
-import FormContainer from "@/components/FormContainer";
 import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
 import { role } from "@/lib/data";
 import prisma from "@/lib/prisma";
-import { ITEM_PER_PAGE } from "@/lib/settings";
-import { auth } from "@clerk/nextjs/server";
 import { Prisma, Producer, User } from "@prisma/client";
-import Image from "next/image";
+import { ITEM_PER_PAGE } from "@/lib/settings";
+import FormContainer from "@/components/FormContainer";
+import { auth } from "@clerk/nextjs/server";
 
 type ProducerList = Producer & { users: User[] };
-const columns = [
-  {
-    header: "Id",
-    accessor: "id",
-    className: "",
-  },
 
-  {
-    header: "Company Name",
-    accessor: "companyName",
-    className: "hidden md:table-cell",
-  },
-
-  {
-    header: "Actions",
-    accessor: "action",
-    className: "hidden md:table-cell",
-  },
-];
 const renderRow = (item: ProducerList) => (
   <tr
     key={item.id}
-    className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-ronMintGreen"
+    className="border-b text-sm border-gray-200  font-medium hover:bg-gray-100"
   >
     <td className="items-center gap-2 p-4">{item.id}</td>
     <td className="items-center gap-2 p-4">{item.name}</td>
+    <td className="items-center gap-2 p-4">{item.alias}</td>
+    <td className="items-center gap-2 p-4">{item.address}</td>
+    <td className="items-center gap-2 p-4">{item.feedstock}</td>
     <td>
       <div className="flex items-center gap-2">
         {role === "admin" && (
@@ -58,8 +42,40 @@ const ProducerListPage = async ({
 
   const { sessionClaims } = auth();
   const role = (sessionClaims?.metadata as { role?: string })?.role;
+  const columns = [
+    {
+      header: "ID",
+      accessor: "id",
+      className: "hidden md:table-cell p-4",
+    },
 
-  //URL PARAMS CONDITION
+    {
+      header: "NAME",
+      accessor: "companyName",
+      className: "p-4",
+    },
+    {
+      header: "ALIAS",
+      accessor: "alias",
+      className: "p-4",
+    },
+    {
+      header: "LOCATION",
+      accessor: "location",
+      className: "p-4",
+    },
+    {
+      header: "FEEDSTOCK",
+      accessor: "feedstock",
+      className: "p-4",
+    },
+
+    {
+      header: "",
+      accessor: "action",
+      className: "",
+    },
+  ];
 
   let query: Prisma.ProducerWhereInput = {};
 
@@ -68,9 +84,11 @@ const ProducerListPage = async ({
       if (value !== undefined) {
         switch (key) {
           case "search":
-            // Combine both conditions into a single query object
-            // query.OR = [{ name: { contains: value, mode: "insensitive" } }];
-            query.OR = [];
+            // Convert the value into a regex-like pattern and use contains for partial matching
+            query.name = {
+              contains: value, // Use the search value directly
+              mode: "insensitive", // Case-insensitive search
+            };
             break;
           default:
             break;
@@ -78,6 +96,7 @@ const ProducerListPage = async ({
       }
     }
   }
+
   const [data, count] = await prisma.$transaction([
     prisma.producer.findMany({
       where: query,
@@ -91,28 +110,32 @@ const ProducerListPage = async ({
   ]);
 
   return (
-    <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
+    <div className="p-6 bg-white border min-h-screen">
       {/* TOP */}
-      <div className="flex items-center justify-between">
-        <h1 className="hidden md:block text-lg font-semibold">All Producers</h1>
-        <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
-          <TableSearch />
-          <div className="flex items-center gap-4 self-end">
-            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
-              <Image src="/filter.png" alt="" width={14} height={14} />
-            </button>
-            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
-              <Image src="/sort.png" alt="" width={14} height={14} />
-            </button>
-            {role === "admin" && (
-              // <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
-              //   <Image src="/plus.png" alt="" width={14} height={14} />
-              // </button>
-              <FormContainer table="producer" type="create" />
-            )}
-          </div>
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6">
+        <div className="mb-4 md:mb-0">
+          <h1 className="text-2xl font-bold text-gray-800">Producers</h1>
+          <p className="text-sm text-gray-500">View and manage producers</p>
         </div>
       </div>
+
+      {/* Search and Sort */}
+
+      <div className="sm:flex sm:items-center justify-between mb-4 gap-4">
+        <TableSearch />
+        {role === "admin" && (
+          // <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
+          //   <Image src="/plus.png" alt="" width={14} height={14} />
+          // </button>
+          <FormContainer table="producer" type="create" />
+        )}
+      </div>
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6">
+        <div className="mb-4 md:mb-0">
+          <p className="text-sm text-gray-500">{count} total producers</p>
+        </div>
+      </div>
+
       {/* LIST */}
       <Table columns={columns} renderRow={renderRow} data={data} />
       {/* PAGINATION */}
@@ -120,5 +143,4 @@ const ProducerListPage = async ({
     </div>
   );
 };
-
 export default ProducerListPage;

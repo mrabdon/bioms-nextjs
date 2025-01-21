@@ -50,7 +50,7 @@ export const volumesData = [
     datePeriod: "Jan 10, 2024 - March 10, 2024",
     committedVolume: "500,000 Liters",
     createdAt: "2024-11-15",
-    
+
     status: "pending",
   },
   {

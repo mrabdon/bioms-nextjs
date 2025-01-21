@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "VolumeSoldToProducer" ALTER COLUMN "mc" DROP NOT NULL,
+ALTER COLUMN "mro" DROP NOT NULL;

@@ -1,25 +1,85 @@
 import Announcements from "@/components/Announcements";
-import AttendanceChart from "@/components/AttendanceChart";
-
-import CountChart from "@/components/CountChart";
 import EventCalendar from "@/components/EventCalendar";
-import FinanceChart from "@/components/FinanceChart";
 import OverviewBox from "@/components/OverviewBox";
 import OverviewCard from "@/components/OverviewCard";
-// import EventCalendar from "@/components/EventCalendar";
-// import FinanceChart from "@/components/FinanceChart";
-import UserCard from "@/components/UserCard";
-
+import prisma from "@/lib/prisma";
 import {
   FaUsers,
   FaFileInvoice,
   FaProjectDiagram,
   FaChartBar,
-  FaTasks,
   FaBriefcase,
 } from "react-icons/fa";
 
-const ProducerPage = () => {
+const ProducerPage = async ({
+  searchParams,
+  params, // Access 'params' directly for route params
+}: {
+  searchParams: { [keys: string]: string | undefined };
+  params: { type: "producer" | "consumer" | "user" }; // Now correctly typed with 'params'
+}) => {
+  const { type } = params; // Access 'type' from 'params'
+
+  const modelMap: Record<typeof type, any> = {
+    producer: prisma.producer,
+    consumer: prisma.consumer,
+    user: prisma.user,
+  };
+
+  // Fetching data for each model
+  const producersCount = await prisma.producer.count();
+  const consumerCount = await prisma.consumer.count();
+  const userCount = await prisma.user.count();
+
+  const totalActualProduction = await prisma.actualProduce.aggregate({
+    _sum: {
+      actualProduction: true,
+    },
+  });
+
+  const totalSold = await prisma.volumeSoldToProducer.aggregate({
+    _sum: {
+      soldAmount: true,
+    },
+  });
+
+  const totalUnsold = await prisma.volume.aggregate({
+    _sum: {
+      unsold: true,
+    },
+  });
+
+  const resultSold = totalSold._sum.soldAmount ? totalSold._sum.soldAmount : 0;
+  const resultUnsold = totalUnsold._sum.unsold ? totalUnsold._sum.unsold : 0;
+  const resultActual = totalActualProduction._sum.actualProduction
+    ? totalActualProduction._sum.actualProduction
+    : 0;
+
+  const overviewData = [
+    {
+      title: "Sold",
+      count: resultSold,
+      formattedCount: `${resultSold.toLocaleString()} liters`,
+      color: "#A3A3A3",
+      icon: <FaChartBar className="text-white" />,
+    },
+    {
+      title: "Unsold",
+      count: resultUnsold,
+      formattedCount: `${resultUnsold.toLocaleString()} liters`,
+      color: "#3B82F6",
+      icon: <FaFileInvoice className="text-white" />,
+    },
+    {
+      title: "Actual Production",
+      count: resultActual,
+      formattedCount: `${resultActual.toLocaleString()} liters`,
+      color: "#1E293B",
+      icon: <FaBriefcase className="text-white" />,
+    },
+  ];
+
+  // Sample data for other cards
   const estimationItems = [
     { label: "Draft", count: 0, percentage: 0.0, color: "black" },
     { label: "Sent", count: 0, percentage: 0.0, color: "green" },
@@ -44,45 +104,6 @@ const ProducerPage = () => {
     { label: "Finished", count: 0, percentage: 0.0, color: "red" },
   ];
 
-  const overviewData = [
-    // {
-    //   title: "Producers",
-    //   count: 0,
-    //   color: "#FDBA74",
-    //   icon: <FaUsers className="text-white" />,
-    // },
-    // {
-    //   title: "Users",
-    //   count: 0,
-    //   color: "#34D399",
-    //   icon: <FaUsers className="text-white" />,
-    // },
-    // {
-    //   title: "Oil Companies",
-    //   count: 0,
-    //   color: "#FB7185",
-    //   icon: <FaProjectDiagram className="text-white" />,
-    // },
-    {
-      title: "Unlifted",
-      count: 0,
-      color: "#A3A3A3",
-      icon: <FaChartBar className="text-white" />,
-    },
-    {
-      title: "Lifted",
-      count: 0,
-      color: "#3B82F6",
-      icon: <FaFileInvoice className="text-white" />,
-    },
-    {
-      title: "Actual Production",
-      count: 0,
-      color: "#1E293B",
-      icon: <FaBriefcase className="text-white" />,
-    },
-  ];
-
   return (
     <div className="p-4 flex gap-4 flex-col md:flex-row">
       {/* LEFT */}
@@ -97,11 +118,11 @@ const ProducerPage = () => {
               count={data.count}
               color={data.color}
               icon={data.icon}
+              formattedCount={data.formattedCount}
             />
           ))}
         </div>
         <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-          {/* <h1 className="text-2xl font-semibold my-4 ">Reports <span className="text-blue-400">Overview</span></h1> */}
           <OverviewCard title="Lifted Overview" items={estimationItems} />
           <OverviewCard title="Unlifted Overview" items={invoiceItems} />
           <OverviewCard
@@ -113,14 +134,13 @@ const ProducerPage = () => {
         {/* MIDDLE CHARTS */}
         <div className="flex gap-4 flex-col lg:flex-row"></div>
         {/* BOTTOM CHART */}
-
         <div className="w-full flex flex-col gap-2"></div>
         <div className="w-full h-[500px]"></div>
       </div>
       {/* RIGHT */}
       <div className="w-full lg:w-1/3 flex flex-col gap-8">
-        <Announcements />
         <EventCalendar />
+        <Announcements />
       </div>
     </div>
   );

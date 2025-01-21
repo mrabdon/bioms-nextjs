@@ -1,18 +1,11 @@
 import Announcements from "@/components/Announcements";
-import AttendanceChart from "@/components/AttendanceChart";
 
-import CountChart from "@/components/CountChart";
 import EventCalendar from "@/components/EventCalendar";
-import FinanceChart from "@/components/FinanceChart";
-// import EventCalendar from "@/components/EventCalendar";
-// import FinanceChart from "@/components/FinanceChart";
-import UserCard from "@/components/UserCard";
 import {
   FaUsers,
   FaFileInvoice,
   FaProjectDiagram,
   FaChartBar,
-  FaTasks,
   FaBriefcase,
 } from "react-icons/fa";
 

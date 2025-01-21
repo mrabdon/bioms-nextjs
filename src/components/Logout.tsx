@@ -10,8 +10,15 @@ const Logout = () => {
 
   useEffect(() => {
     const logout = async () => {
+      // Sign out the user and clear the session
       await signOut();
-      router.push("/"); // Redirect to login page
+
+      // Optionally clear anything stored in localStorage or cookies (if needed)
+      // localStorage.clear(); // if you're using local storage
+      // Cookies.remove('your_cookie_name'); // if you have custom cookies
+
+      // Redirect the user to the login page
+      router.push("/login"); // Ensure this points to your login route
     };
 
     logout();

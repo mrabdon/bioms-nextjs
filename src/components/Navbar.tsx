@@ -12,7 +12,7 @@ const Navbar = async () => {
     user &&
     (await prisma.user.findUnique({
       where: { id: user.id }, // Assuming email is used to identify the user
-      select: { img: true, name: true },
+      select: { img: true, firstname: true },
     }));
 
   const imageUrl = userFromDb?.img
@@ -20,7 +20,7 @@ const Navbar = async () => {
     : "/noAvatar.png";
 
   return (
-    <div className="w-full border-b border-gray-300">
+    <div className="w-full bg-white border">
       <div className="flex items-center justify-between p-4">
         {/* SEARCH BAR */}
         {/* <div className="hidden md:flex items-center gap-2 text-xs rounded-full ring-[1.5px] ring-gray-300 px-2">
@@ -86,6 +86,7 @@ const Navbar = async () => {
               </div>
             )}
           </div>
+          {/* <UserButton /> */}
         </div>
       </div>
     </div>

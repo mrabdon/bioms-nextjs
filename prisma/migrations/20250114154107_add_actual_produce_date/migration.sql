@@ -1,0 +1,8 @@
+-- AlterTable
+ALTER TABLE "Volume" ADD COLUMN     "actualProduceDate" TIMESTAMP(3),
+ALTER COLUMN "committedVolume" DROP NOT NULL,
+ALTER COLUMN "actualProduction" DROP NOT NULL,
+ALTER COLUMN "begInventory" DROP NOT NULL,
+ALTER COLUMN "totalStock" DROP NOT NULL,
+ALTER COLUMN "sold" DROP NOT NULL,
+ALTER COLUMN "unsold" DROP NOT NULL;

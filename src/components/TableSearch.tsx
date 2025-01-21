@@ -1,30 +1,38 @@
 "use client";
-import Image from "next/image";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 const TableSearch = () => {
   const router = useRouter();
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  // Handle input change to update the search term and URL immediately
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchTerm(value);
 
-    const value = (e.currentTarget[0] as HTMLInputElement).value;
+    // Update URL with the search term immediately
     const params = new URLSearchParams(window.location.search);
-    params.set("search", value);
+    if (value) {
+      params.set("search", value); // Set the search term in the URL
+    } else {
+      params.delete("search"); // Remove search param if input is empty
+    }
     router.push(`${window.location.pathname}?${params}`);
   };
+
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="w-full md:w-auto flex items-center gap-2 text-xs rounded-full ring-[1.5px] ring-gray-300 px-2"
-    >
-      <Image src="/search.png" alt="" width={14} height={14} />
-      <input
-        type="text"
-        placeholder="Search..."
-        className="w-[200px] p-2 bg-transparent outline-none"
-      />
-    </form>
+    <div className="sm:flex sm:items-center justify-between">
+      <div className="flex gap-4 flex-grow">
+        <input
+          type="text"
+          value={searchTerm}
+          onChange={handleChange}
+          placeholder="Search"
+          className="w-full sm:w-72 px-4 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-purple-500 focus:outline-none"
+        />
+      </div>
+    </div>
   );
 };
 

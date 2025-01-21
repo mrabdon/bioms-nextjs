@@ -1,8 +1,10 @@
 "use client";
 
 import {
+  deleteAnnouncement,
+  deleteConsumer,
+  deleteEvent,
   deleteProducer,
-  deleteSubject,
   deleteUser,
   deleteVolume,
 } from "@/lib/actions";
@@ -15,11 +17,13 @@ import { useRouter } from "next/navigation";
 import { FormContainerProps } from "./FormContainer";
 
 const deleteActionMap = {
-  subject: deleteSubject,
-  teacher: deleteSubject,
   volume: deleteVolume,
   producer: deleteProducer,
+  consumer: deleteConsumer,
   user: deleteUser,
+  announcement: deleteAnnouncement,
+  event: deleteEvent,
+  volumeActualProduce: deleteEvent,
 };
 const UserForm = dynamic(() => import("./forms/UserForm"), {
   loading: () => <h1>Loading...</h1>,
@@ -29,13 +33,27 @@ const VolumeForm = dynamic(() => import("./forms/VolumeForm"), {
   loading: () => <h1>Loading...</h1>,
 });
 
-const SubjectForm = dynamic(() => import("./forms/SubjectForm"), {
-  loading: () => <h1>Loading...</h1>,
-});
-
 const ProducerForm = dynamic(() => import("./forms/ProducerForm"), {
   loading: () => <h1>Loading...</h1>,
 });
+
+const ConsumerForm = dynamic(() => import("./forms/ConsumerForm"), {
+  loading: () => <h1>Loading...</h1>,
+});
+
+const AnnouncementForm = dynamic(() => import("./forms/AnnouncementForm"), {
+  loading: () => <h1>Loading...</h1>,
+});
+const EventForm = dynamic(() => import("./forms/EventForm"), {
+  loading: () => <h1>Loading...</h1>,
+});
+
+const VolumeActualProduceForm = dynamic(
+  () => import("./forms/VolumeActualProduceForm"),
+  {
+    loading: () => <h1>Loading...</h1>,
+  }
+);
 
 // const StudentForm = dynamic(() => import("./forms/StudentForm"), {
 //   loading: () => <h1>Loading...</h1>,
@@ -44,19 +62,11 @@ const ProducerForm = dynamic(() => import("./forms/ProducerForm"), {
 const forms: {
   [key: string]: (
     setOpen: Dispatch<SetStateAction<boolean>>,
-    type: "create" | "update",
+    type: "create" | "update" | "createActual",
     data?: any,
     relatedData?: any
   ) => JSX.Element;
 } = {
-  subject: (setOpen, type, data, relatedData) => (
-    <SubjectForm
-      type={type}
-      data={data}
-      setOpen={setOpen}
-      relatedData={relatedData}
-    />
-  ),
   user: (setOpen, type, data, relatedData) => (
     <UserForm
       type={type}
@@ -73,17 +83,41 @@ const forms: {
       // relatedData={relatedData}
     />
   ),
-
-  // teacher: (setOpen, type, data, relatedData) => (
-  //   <TeacherForm
-  //     type={type}
-  //     data={data}
-  //     setOpen={setOpen}
-  //     relatedData={relatedData}
-  //   />
-  // ),
+  volumeActualProduce: (setOpen, type, data, relatedData) => (
+    <VolumeActualProduceForm
+      type={type}
+      data={data}
+      setOpen={setOpen}
+      // relatedData={relatedData}
+    />
+  ),
   producer: (setOpen, type, data, relatedData) => (
     <ProducerForm
+      type={type}
+      data={data}
+      setOpen={setOpen}
+      // relatedData={relatedData}
+    />
+  ),
+
+  consumer: (setOpen, type, data, relatedData) => (
+    <ConsumerForm
+      type={type}
+      data={data}
+      setOpen={setOpen}
+      // relatedData={relatedData}
+    />
+  ),
+  announcement: (setOpen, type, data, relatedData) => (
+    <AnnouncementForm
+      type={type}
+      data={data}
+      setOpen={setOpen}
+      // relatedData={relatedData}
+    />
+  ),
+  event: (setOpen, type, data, relatedData) => (
+    <EventForm
       type={type}
       data={data}
       setOpen={setOpen}
@@ -99,17 +133,28 @@ const FormModal = ({
   id,
   relatedData,
 }: FormContainerProps & { relatedData?: any }) => {
-  const size = type === "create" ? "w-8 h-8" : "w-7 h-7";
+  const size = type === "create";
   const bgColor =
     type === "create"
-      ? "bg-lamaYellow"
+      ? "bg-purple-500"
       : type === "update"
-      ? "bg-lamaSky"
+      ? "bg-green-500"
+      : type === "createActual"
+      ? "bg-green-500"
       : type === "delete"
-      ? "bg-ronRedLight"
+      ? "bg-red-400"
       : "bg-lamaPurple";
 
-  const typeTitle = type === "delete" ? "delete" : "del";
+  const typeTitle =
+    type === "delete"
+      ? "Delete"
+      : type === "create"
+      ? "Create"
+      : type === "update"
+      ? "Update"
+      : type === "createActual"
+      ? "+ Actual Produce"
+      : "Del";
 
   const [open, setOpen] = useState(false);
 
@@ -130,19 +175,28 @@ const FormModal = ({
     }, [state, router]);
 
     return type === "delete" && id ? (
-      <form action={formAction} className="p-4 flex flex-col gap-4">
+      <form
+        action={formAction}
+        className="p-4 flex flex-col gap-4 items-center"
+      >
         <input type="text | number" name="id" value={id} hidden />
+        <Image
+          className="mb-4"
+          src="/x-icon.png"
+          alt="Cancel Icon"
+          width={100}
+          height={100}
+        />
         <span className="text-center font-medium">
-          All data will be lost. Are you sure you want to delete this{" "}
-          <span className=" text-center font-medium text-red-500"> {id}</span>{" "}
-          {table}?
+          Are you sure you want to delete this {table}?
         </span>
+        <span className="text-center font-light">All data will be lost</span>
 
         <button className="bg-red-700 text-white py-2 px-4 rounded-md border-none w-max self-center">
           Delete
         </button>
       </form>
-    ) : type === "create" || type === "update" ? (
+    ) : type === "create" || type === "update" || type === "createActual" ? (
       forms[table](setOpen, type, data, relatedData)
     ) : (
       "Form not found!"
@@ -152,11 +206,12 @@ const FormModal = ({
   return (
     <>
       <button
-        className={`${size} flex items-center justify-center rounded-full ${bgColor}`}
+        className={`${size} flex items-center text-white font-bold g-2 p-2 justify-center rounded-full ${bgColor}`}
         title={`${typeTitle}`}
         onClick={() => setOpen(true)}
       >
-        <Image src={`/${type}.png`} alt="" width={20} height={20} />
+        {/* <Image src={`/${type}.png`} alt="" width={20} height={20} /> */}
+        {typeTitle}
       </button>
       {open && (
         <div className="w-screen h-screen absolute left-0 top-0 bg-black bg-opacity-60 z-50 flex items-center justify-center">
